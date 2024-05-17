@@ -92,11 +92,20 @@ function divClick(id){
 }
 
 function checkValidMove(oldSelectedDiv,newSelectedDiv){
+    console.log("oldSelectedDiv==",oldSelectedDiv)
+
+        let isValidMove = false
+        if(oldSelectedDiv.childElementCount > 0){
+            //check if user select empty div and again selects empty div. Its invalid move
+            console.log("has child node",oldSelectedDiv.hasChildNodes())
+            return isValidMove
+        }
     
         console.log("move element called")
-        let isValidMove = false
         const classElement = newSelectedDiv.classList
-        // console.log("oldSelectedDiv==",newSelectedDiv.classList.includes('dark'))
+        /*console.log("oldSelectedDiv==",newSelectedDiv.classList.includes('dark'))
+
+        check if movement is in dark position*/
         let isDark = false
         for (var i = 0; i < newSelectedDiv.classList.length; i++) {
             if (classElement[i] == 'dark'){
@@ -107,6 +116,8 @@ function checkValidMove(oldSelectedDiv,newSelectedDiv){
         }
         console.log(parseInt(newSelectedDiv.id.split('')[4]))
         console.log(parseInt(oldSelectedDiv.id.split('')[4]))
+
+        //check if user move is beyond current move means user is moving backward   
         if(isDark && (parseInt(newSelectedDiv.id.split('')[4]) > parseInt(oldSelectedDiv.id.split('')[4]))){
             isValidMove = true
         }
