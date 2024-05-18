@@ -4,11 +4,8 @@ let oldSelectedDiv = null
 
 function divClick(id) {
 
-
-
-
     console.log("id==", id)
-    newSelectedDiv = document.querySelector(`#item${id}`)
+    let newSelectedDiv = document.querySelector(`#item${id}`)
     newSelectedDiv.style.border = '2px solid red'
 
     if (oldSelectedDiv) {
@@ -53,9 +50,6 @@ function divClick(id) {
         oldSelectedDiv = newSelectedDiv
     }
 
-
-
-
 }
 
 function unselectDiv(selectedDiv) {
@@ -77,6 +71,9 @@ function performMovement(oldSelectedDiv, newSelectedDiv) {
 
 
 function determineDarkOrWhite(selectedDiv) {
+    //takes div as input extracts its child and determine if it white or dark
+
+
     console.log("selected div child==", selectedDiv.id)
     let color;
     const parentElement = document.querySelector(`#${selectedDiv.id}`);
@@ -152,17 +149,93 @@ function isDiagonalMove(start, end) {
     return isDiagonalMove
 }
 
+function checkItemInBtwnDarkMovement(oldSelectedDiv, newSelectedDiv) {
+    if (+newSelectedDiv[5] < +oldSelectedDiv[5]) {
+        console.log("left movement")
+        let newElementId = `${+oldSelectedDiv[4] + 1}` + `${+oldSelectedDiv[5] - 1}`
+        console.log("===new-ele-id====", newElementId)
+        return newElementId
+    } else {
+        console.log("right movement ")
+        let newElementId = `${+oldSelectedDiv[4] + 1}` + `${+oldSelectedDiv[5] + 1}`
+        console.log("===new-ele-id====", newElementId)
+        return newElementId
+    }
+
+}
+
+function checkItemInBtwnWhiteMovement(oldSelectedDiv, newSelectedDiv) {
+    if (+newSelectedDiv[5] < +oldSelectedDiv[5]) {
+        console.log("left movement")
+        let newElementId = `${+oldSelectedDiv[4] - 1}` + `${+oldSelectedDiv[5] - 1}`
+        console.log("===new-ele-id====", newElementId)
+        return newElementId
+    } else {
+        console.log("right movement ")
+        let newElementId = `${+oldSelectedDiv[4] - 1}` + `${+oldSelectedDiv[5] + 1}`
+        console.log("===new-ele-id====", newElementId)
+        return newElementId
+    }
+
+}
+
+
+
+
+
+function checkRightMovementForDark(oldSelectedDiv, newSelectedDiv) {
+    if (+newSelectedDiv[5] < +oldSelectedDiv[5]) {
+        let newElementId = `${+oldSelectedDiv[4] + 1}` + `${+oldSelectedDiv[5] - 1}`
+        console.log("===new-ele-id====", newElementId)
+    } return true
+
+}
+
+function idOfChildAtCenter() {
+
+}
+
 function isValidIndexMoveForDark(oldSelectedDiv, newSelectedDiv) {
+
+    /* 
+    
+    */
     console.log("nsd", parseInt(newSelectedDiv[4]))
     console.log("osd", parseInt(oldSelectedDiv[4]))
 
     if ((parseInt(newSelectedDiv[4]) == parseInt(oldSelectedDiv[4]) + 1)) {
+        //checks if movement is only one step
         return true
 
     }
     if ((parseInt(newSelectedDiv[4]) == parseInt(oldSelectedDiv[4]) + 2)) {
+        /*
+        
+        check if movement is two step
+        if its two stem we have to determine if child of middle element is present
+        if child is present and if it is darm then movement is invalid
+        else valid movement
+        
+        
+        */
 
-        return true
+        let elementId = checkItemInBtwnDarkMovement(oldSelectedDiv, newSelectedDiv)
+        let domElement = document.querySelector(`#item${elementId}`)
+        if (domElement.childElementCount > 0) {
+            let childColor = determineDarkOrWhite(domElement)
+
+            if (childColor == 'white') {
+                console.log("childcolor==", childColor)
+                domElement.innerHTML = ``
+                return true
+
+            } else {
+                return false
+            }
+
+        }
+        return false
+
     }
     return false
 
@@ -178,7 +251,34 @@ function isValidIndexMoveForWhite(oldSelectedDiv, newSelectedDiv) {
     }
     if ((parseInt(newSelectedDiv[4]) + 2 == parseInt(oldSelectedDiv[4]))) {
 
-        return true
+        /*
+         
+         check if movement is two step
+         if its two stem we have to determine if child of middle element is present
+         if child is present and if it is darm then movement is invalid
+         else valid movement
+         
+         
+         */
+
+        let elementId = checkItemInBtwnWhiteMovement(oldSelectedDiv, newSelectedDiv)
+        let domElement = document.querySelector(`#item${elementId}`)
+        if (domElement.childElementCount > 0) {
+            let childColor = determineDarkOrWhite(domElement)
+
+            if (childColor == 'dark') {
+                console.log("childcolor==", childColor)
+                domElement.innerHTML = ``
+                return true
+
+            } else {
+                return false
+            }
+
+        }
+        return false
+
+
     }
     return false
 }
