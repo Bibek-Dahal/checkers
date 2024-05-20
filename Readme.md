@@ -1,6 +1,6 @@
 # Checkers Game Implementation
 
-![Checkers Initial Setup]('./assets/demo/checkers-demo.png')
+![Checkers Initial Setup](./assets/demo/checkers-demo.png)
 ## Introduction
 This project is an implementation of the classic game of Checkers using HTML, CSS, and JavaScript. Checkers is a two-player strategy board game played on an 8x8 grid. The game involves diagonal moves of uniform game pieces and mandatory captures.
 
