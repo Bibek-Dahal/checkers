@@ -1,12 +1,10 @@
-let stack = []
-
-function saveState() {
+export function saveState() {
     let state = document.querySelector('body').innerHTML
     console.log("child nodes==", typeof state)
     localStorage.setItem('state', state)
 }
 
-function restoreState() {
+export function restoreState() {
 
     let state = localStorage.getItem('state')
     if (state) {
@@ -18,8 +16,10 @@ function restoreState() {
 
 }
 
-function clearState() {
+export function clearState() {
     localStorage.clear()
 }
+
+
 
 
