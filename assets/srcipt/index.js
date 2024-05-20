@@ -2,6 +2,8 @@ root = document.querySelector('#root')
 let oldSelectedDiv = null
 
 
+
+
 function divClick(id) {
 
     console.log("id==", id)

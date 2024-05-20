@@ -1,3 +1,5 @@
+let stack = []
+
 function saveState() {
     let state = document.querySelector('body').innerHTML
     console.log("child nodes==", typeof state)
@@ -19,3 +21,5 @@ function restoreState() {
 function clearState() {
     localStorage.clear()
 }
+
+
