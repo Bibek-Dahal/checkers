@@ -40,7 +40,7 @@ export function addEventListenerToButton() {
       const element = document.querySelector("#board")
       console.log("result===",result)
       element.innerHTML = result;
-      // addEventListener()
+      addEventListener()
     }
   });
 
