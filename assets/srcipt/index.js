@@ -194,6 +194,11 @@ function isValidIndexMoveForDark(oldSelectedDiv, newSelectedDiv) {
 
       if (childColor == "white") {
         console.log("childcolor==", childColor);
+        document.querySelector('#dark-carrom-content').innerHTML += `
+        <div class="col">
+            <div class="white-carrom"></div>
+        </div>
+        `
         domElement.innerHTML = ``;
         return true;
       } else {
@@ -233,6 +238,11 @@ function isValidIndexMoveForWhite(oldSelectedDiv, newSelectedDiv) {
 
       if (childColor == "dark") {
         console.log("childcolor==", childColor);
+        document.querySelector('#white-carrom-content').innerHTML += `
+        <div class="col">
+            <div class="dark-carrom"></div>
+        </div>
+        `
         domElement.innerHTML = ``;
         return true;
       } else {

@@ -50,7 +50,7 @@ export function addEventListenerToButton() {
     if (result) {
       console.log("inside if of result if", typeof result);
       const element = document.querySelector("#board")
-      console.log("result===",result)
+    //   console.log("result===",result)
       element.innerHTML = result;
       // addEventListener()
     }

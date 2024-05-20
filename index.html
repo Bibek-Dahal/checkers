@@ -22,7 +22,7 @@
     <style>
       .box {
         /* width: 70px !important; */
-        height: 70px !important;
+        height: 60px !important;
       }
 
       .container-bg {
@@ -32,8 +32,9 @@
   </head>
 
   <body>
+    
     <div class="container container-bg mt-1 shadow-lg" style="width: 600px">
-      <div class="row d-flex justify-content-around">
+      <div class="row d-flex justify-content-around mb-2">
         <div class="col">
           <button class="btn btn-primary" id="save-state">Save State</button>
           <button class="btn btn-primary" id="restore-state" on>
@@ -44,6 +45,7 @@
           <button class="btn btn-primary" id="redo">Redo</button>
         </div>
       </div>
+      
       <div class="row text-center">
         <div class="col">A</div>
         <div class="col">B</div>
@@ -55,6 +57,13 @@
         <div class="col">H</div>
       </div>
       <div id="board">
+        <div class="row">
+          <div class="white-container">
+            <div class="row d-flex flex-row gap-1 justify-content-start " id="white-carrom-content">
+              
+            </div>
+          </div>
+        </div>
         <div class="row gap-1 box p-1">
           <div class="col w-10 h-100 mb-1 white" id="item00"></div>
           <div class="col mb-1 dark" id="item01">
@@ -190,7 +199,15 @@
           </div>
           <div class="col mb-1 white" id="item77"></div>
         </div>
+        <div class="dark-container">
+          <div class="row d-flex flex-row " id="dark-carrom-content">
+            
+          </div>
+        </div>
       </div>
+      
     </div>
+    
+    
   </body>
 </html>
