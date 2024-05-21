@@ -57,12 +57,30 @@ function unselectDiv(selectedDiv) {
   oldSelectedDiv = null;
 }
 
+function checkNewSelectedDivLastRow(selectedDiv,removedChild){
+  const selectedDivId = selectedDiv.id[4]
+  console.log("check last row newSelctedDivId====",selectedDiv.id)
+  if(selectedDivId == 7 || selectedDivId == 0){
+    console.log("inside if of checkNewSelDiv")
+    console.log("slecteddiv firstChild",selectedDiv.firstElementChild)
+    selectedDiv.firstElementChild.classList.add('king')
+  }
+
+
+}
+
+
+
 function performMovement(oldSelectedDiv, newSelectedDiv) {
   console.log("====perfom movement called===");
   const firstChild = oldSelectedDiv.firstElementChild;
   const removedChild = oldSelectedDiv.removeChild(firstChild);
   console.log("removed child==", removedChild);
   newSelectedDiv.appendChild(removedChild);
+
+  checkNewSelectedDivLastRow(newSelectedDiv,removedChild)
+
+
   unselectDiv(newSelectedDiv);
 
   const currentState = document.querySelector("#board").innerHTML;
@@ -77,6 +95,7 @@ function determineDarkOrWhite(selectedDiv) {
   console.log("selected div child==", selectedDiv.id);
   let color;
   const parentElement = document.querySelector(`#${selectedDiv.id}`);
+
   const firstChild = parentElement.firstElementChild;
   const classElement = firstChild.classList;
   for (var i = 0; i < selectedDiv.classList.length; i++) {
@@ -164,6 +183,134 @@ function checkItemInBtwnWhiteMovement(oldSelectedDiv, newSelectedDiv) {
 }
 
 
+function determinIfKing(divId){
+  
+  /*console.log("oldSelectedDiv==",newSelectedDiv.classList.includes('dark'))
+ 
+    check if movement is in dark position*/
+  const newSelectedDiv = document.querySelector(`#${divId}`).firstElementChild
+  let isKing = false
+
+  const classElement = newSelectedDiv.classList;
+  /*console.log("oldSelectedDiv==",newSelectedDiv.classList.includes('dark'))
+ 
+    check if movement is in dark position*/
+  
+  for (var i = 0; i < newSelectedDiv.classList.length; i++) {
+    if (classElement[i] == "king") {
+      isKing = true;
+      //first condition satisfied
+      break;
+    }
+  }
+
+  
+  console.log("before returnng,is King===",isKing)
+  return isKing
+}
+
+function checkItemInBtwnDarkMovementForKing(oldSelectedDiv, newSelectedDiv){
+
+
+let canDeleteItem = true
+
+const startRowOldDiv = +oldSelectedDiv[4]
+const startColOldDIv = +oldSelectedDiv[5]
+const endRownNewDiv = +newSelectedDiv[4]
+const endColNewDiv = +newSelectedDiv[5]
+
+
+
+const selectedChildren = []
+
+if(startRowOldDiv > endRownNewDiv){
+  console.log("inside if=====%%%%")
+  let i;
+  let j;
+  if(startColOldDIv<endColNewDiv){
+    //right movement
+    i = startRowOldDiv  - 1
+    j = startColOldDIv + 1
+  }else{
+    
+    //left movement
+    i = startRowOldDiv  - 1
+    j = startColOldDIv - 1
+    
+  }
+  
+  //increase count
+  while(i != endRownNewDiv){
+
+    //check remaining for if only dark element is present
+    console.log("i===",i)
+    console.log("j===",j)
+    const element = document.querySelector(`#item${i}${j}`)
+    selectedChildren.push(element)
+    if(startColOldDIv<endColNewDiv){
+      //right movement
+      i--
+      j++
+    }else{
+      
+      //left movement
+      i--
+      j--
+      
+    }
+  }
+  return selectedChildren
+
+
+}else{
+  console.log("inside else=== of idffaf")
+  console.log("inside if=====%%%%")
+  let i;
+  let j;
+  if(startColOldDIv>endColNewDiv){
+    //left movement
+    i = startRowOldDiv  + 1
+    j = startColOldDIv - 1
+  }else{
+    
+    //right movement
+    i = startRowOldDiv  + 1
+    j = startColOldDIv + 1
+    
+  }
+  
+  //increase count
+  while(i != endRownNewDiv){
+
+    //check remaining for if only dark element is present
+    console.log("i===",i)
+    console.log("j===",j)
+    const element = document.querySelector(`#item${i}${j}`)
+    selectedChildren.push(element)
+    if(startColOldDIv>endColNewDiv){
+      //left movement
+      i++
+      j--
+    }else{
+      
+      //right movement
+      i++
+      j++
+      
+    }
+  }
+  return selectedChildren
+}
+
+
+}
+
+function childrenInBetweenForKingMovement(){
+  //retrives children in between old selected div and new selected div so that we can remove children
+
+
+}
+
 
 function isValidIndexMoveForDark(oldSelectedDiv, newSelectedDiv) {
   /* 
@@ -171,6 +318,49 @@ function isValidIndexMoveForDark(oldSelectedDiv, newSelectedDiv) {
     */
   console.log("nsd", parseInt(newSelectedDiv[4]));
   console.log("osd", parseInt(oldSelectedDiv[4]));
+
+  if(determinIfKing(oldSelectedDiv)){
+
+    /*
+    
+      what this function actually does is at first if deremine carrom is king
+      if it is check item present in between jump
+      if all items are white remove items and perform movement
+    */
+
+
+
+    let isValidMove = true
+    let darkItemPresent = false;
+    console.log("its king===true")
+    let returnedList = checkItemInBtwnDarkMovementForKing(oldSelectedDiv,newSelectedDiv)
+    console.log("items between kings movement=====",returnedList)
+
+    returnedList = returnedList.filter((item)=> item.childElementCount > 0)
+
+    if(returnedList.length > 0){
+      for(let i=0;i<returnedList.length;i++){
+        let color = determineDarkOrWhite(returnedList[i])
+        if(color == "dark"){
+          isValidMove = false
+          
+        }
+      }
+    }
+
+    if(isValidMove){
+      for(let i=0;i<returnedList.length;i++){
+        console.log('=====returned list element=====',returnedList[i].id)
+        document.querySelector(`#${returnedList[i].id}`).innerHTML = ``
+        
+        
+        
+      }
+    }
+
+
+    return isValidMove
+  }
 
   if (parseInt(newSelectedDiv[4]) == parseInt(oldSelectedDiv[4]) + 1) {
     //checks if movement is only one step
@@ -194,11 +384,11 @@ function isValidIndexMoveForDark(oldSelectedDiv, newSelectedDiv) {
 
       if (childColor == "white") {
         console.log("childcolor==", childColor);
-        document.querySelector('#dark-carrom-content').innerHTML += `
-        <div class="col">
-            <div class="white-carrom"></div>
-        </div>
-        `
+        // document.querySelector('#dark-carrom-content').innerHTML += `
+        // <div class="col">
+        //     <div class="white-carrom"></div>
+        // </div>
+        // `
         domElement.innerHTML = ``;
         return true;
       } else {
@@ -213,6 +403,49 @@ function isValidIndexMoveForDark(oldSelectedDiv, newSelectedDiv) {
 function isValidIndexMoveForWhite(oldSelectedDiv, newSelectedDiv) {
   console.log("nsd", parseInt(newSelectedDiv[4]));
   console.log("osd", parseInt(oldSelectedDiv[4]));
+
+  if(determinIfKing(oldSelectedDiv)){
+
+    /*
+    
+      what this function actually does is at first if deremine carrom is king
+      if it is check item present in between jump
+      if all items are white remove items and perform movement
+    */
+
+
+
+    let isValidMove = true
+    let whiteItemPresent = false;
+    
+    console.log("its king===true")
+    let returnedList = checkItemInBtwnDarkMovementForKing(oldSelectedDiv,newSelectedDiv)
+    console.log("items between kings movement=====",returnedList)
+    returnedList = returnedList.filter((item)=> item.childElementCount > 0)
+
+    if(returnedList.length > 0){
+      for(let i=0;i<returnedList.length;i++){
+        let color = determineDarkOrWhite(returnedList[i])
+        if(color == "white"){
+          isValidMove = false
+          
+        }
+      }
+    }
+
+    if(isValidMove){
+      for(let i=0;i<returnedList.length;i++){
+        console.log('=====returned list element=====',returnedList[i].id)
+        document.querySelector(`#${returnedList[i].id}`).innerHTML = ``
+        
+        
+        
+      }
+    }
+
+
+    return isValidMove 
+  }
 
   if (parseInt(newSelectedDiv[4]) + 1 == parseInt(oldSelectedDiv[4])) {
     return true;
@@ -238,11 +471,11 @@ function isValidIndexMoveForWhite(oldSelectedDiv, newSelectedDiv) {
 
       if (childColor == "dark") {
         console.log("childcolor==", childColor);
-        document.querySelector('#white-carrom-content').innerHTML += `
-        <div class="col">
-            <div class="dark-carrom"></div>
-        </div>
-        `
+        // document.querySelector('#white-carrom-content').innerHTML += `
+        // <div class="col">
+        //     <div class="dark-carrom"></div>
+        // </div>
+        // `
         domElement.innerHTML = ``;
         return true;
       } else {

@@ -1,3 +1,5 @@
+
+
 .white{
     background-color: #faedcd;
 }
@@ -80,6 +82,26 @@ body{
     margin-top: 5px;
     margin-bottom: 10px;
 
+}
+
+.king {
+    /* Increase size and adjust border */
+    width: 50px;
+    height: 50px;
+    position: relative;
+    border: 3px solid gold; /* A royal color for the border */
+    box-sizing: border-box; /* Ensure the border doesn't affect the size */
+    /* Add a crown icon */
+    background-image: url('../images/crown.gif'); /* Replace 'crown-icon.png' with your crown icon */
+    background-size: contain; /* Ensure the crown icon fits within the piece */
+    background-repeat: no-repeat; /* Prevent the icon from repeating */
+    background-position: center; /* Center the icon */
+    /* Additional styles to make it stand out */
+    z-index: 2; /* Ensure the king is above other pieces */
+    transform: scale(1.1); /* Slightly increase the size for emphasis */
+    box-shadow: 0 0 10px gold; /* Add a glowing effect */
+    /* background: transparent; */
+    
 }
 
   
