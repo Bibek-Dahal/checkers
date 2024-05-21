@@ -4,6 +4,8 @@ import {
   addEventListener,
   addEventListenerToButton,
 } from "./addEventListener.js";
+import {socket} from "./socket.js"
+
 
 let oldSelectedDiv = null;
 
@@ -11,6 +13,10 @@ addEventListener();
 addEventListenerToButton();
 
 export function divClick(id) {
+
+  socket.emit("divClicked", JSON.stringify({'divId':id}));
+
+
   console.log("id==", id);
   let newSelectedDiv = document.querySelector(`#item${id}`);
   newSelectedDiv.style.border = "2px solid red";
