@@ -4,7 +4,7 @@ import {
   addEventListener,
   addEventListenerToButton,
 } from "./addEventListener.js";
-import {socket} from "./socket.js"
+import { socket } from "./socket.js"
 
 
 let oldSelectedDiv = null;
@@ -12,9 +12,53 @@ let oldSelectedDiv = null;
 addEventListener();
 addEventListenerToButton();
 
+export function createMvmt(id) {
+
+  console.log("id==", id);
+  let newSelectedDiv = document.querySelector(`#item${id}`);
+  newSelectedDiv.style.border = "2px solid red";
+
+  if (oldSelectedDiv) {
+    console.log("oid==", oldSelectedDiv.id);
+  }
+
+  if (oldSelectedDiv != null) {
+    if (oldSelectedDiv.id == newSelectedDiv.id) {
+      //checks if user slect same newSelectedDiv
+      // it should be unselected so marked oldSelectedDiv as null
+      newSelectedDiv.style.border = null;
+      oldSelectedDiv = null;
+
+      return;
+    }
+
+    console.log("inside if");
+
+    let prev_div = document.querySelector(`#${oldSelectedDiv.id}`);
+    prev_div.style.border = null;
+    let oldSelectedDivArg = oldSelectedDiv;
+    oldSelectedDiv = newSelectedDiv;
+
+    let validMove = checkValidMove(oldSelectedDivArg, newSelectedDiv);
+    // prev_div.innerHTML = ''
+    console.log("valid move==", validMove);
+
+    if (validMove) {
+      performMovement(oldSelectedDivArg, newSelectedDiv);
+    }
+  } else {
+    console.log("inside else");
+
+    console.log(newSelectedDiv.style.class);
+
+    oldSelectedDiv = newSelectedDiv;
+  }
+}
+
 export function divClick(id) {
 
-  socket.emit("divClicked", JSON.stringify({'divId':id}));
+
+  socket.emit("divClicked", JSON.stringify({ 'divId': id }));
 
 
   console.log("id==", id);
@@ -63,12 +107,12 @@ function unselectDiv(selectedDiv) {
   oldSelectedDiv = null;
 }
 
-function checkNewSelectedDivLastRow(selectedDiv,removedChild){
+function checkNewSelectedDivLastRow(selectedDiv, removedChild) {
   const selectedDivId = selectedDiv.id[4]
-  console.log("check last row newSelctedDivId====",selectedDiv.id)
-  if(selectedDivId == 7 || selectedDivId == 0){
+  console.log("check last row newSelctedDivId====", selectedDiv.id)
+  if (selectedDivId == 7 || selectedDivId == 0) {
     console.log("inside if of checkNewSelDiv")
-    console.log("slecteddiv firstChild",selectedDiv.firstElementChild)
+    console.log("slecteddiv firstChild", selectedDiv.firstElementChild)
     selectedDiv.firstElementChild.classList.add('king')
   }
 
@@ -84,7 +128,7 @@ function performMovement(oldSelectedDiv, newSelectedDiv) {
   console.log("removed child==", removedChild);
   newSelectedDiv.appendChild(removedChild);
 
-  checkNewSelectedDivLastRow(newSelectedDiv,removedChild)
+  checkNewSelectedDivLastRow(newSelectedDiv, removedChild)
 
 
   unselectDiv(newSelectedDiv);
@@ -189,8 +233,8 @@ function checkItemInBtwnWhiteMovement(oldSelectedDiv, newSelectedDiv) {
 }
 
 
-function determinIfKing(divId){
-  
+function determinIfKing(divId) {
+
   /*console.log("oldSelectedDiv==",newSelectedDiv.classList.includes('dark'))
  
     check if movement is in dark position*/
@@ -201,7 +245,7 @@ function determinIfKing(divId){
   /*console.log("oldSelectedDiv==",newSelectedDiv.classList.includes('dark'))
  
     check if movement is in dark position*/
-  
+
   for (var i = 0; i < newSelectedDiv.classList.length; i++) {
     if (classElement[i] == "king") {
       isKing = true;
@@ -210,108 +254,108 @@ function determinIfKing(divId){
     }
   }
 
-  
-  console.log("before returnng,is King===",isKing)
+
+  console.log("before returnng,is King===", isKing)
   return isKing
 }
 
-function checkItemInBtwnDarkMovementForKing(oldSelectedDiv, newSelectedDiv){
+function checkItemInBtwnDarkMovementForKing(oldSelectedDiv, newSelectedDiv) {
 
 
-let canDeleteItem = true
+  let canDeleteItem = true
 
-const startRowOldDiv = +oldSelectedDiv[4]
-const startColOldDIv = +oldSelectedDiv[5]
-const endRownNewDiv = +newSelectedDiv[4]
-const endColNewDiv = +newSelectedDiv[5]
+  const startRowOldDiv = +oldSelectedDiv[4]
+  const startColOldDIv = +oldSelectedDiv[5]
+  const endRownNewDiv = +newSelectedDiv[4]
+  const endColNewDiv = +newSelectedDiv[5]
 
 
 
-const selectedChildren = []
+  const selectedChildren = []
 
-if(startRowOldDiv > endRownNewDiv){
-  console.log("inside if=====%%%%")
-  let i;
-  let j;
-  if(startColOldDIv<endColNewDiv){
-    //right movement
-    i = startRowOldDiv  - 1
-    j = startColOldDIv + 1
-  }else{
-    
-    //left movement
-    i = startRowOldDiv  - 1
-    j = startColOldDIv - 1
-    
-  }
-  
-  //increase count
-  while(i != endRownNewDiv){
-
-    //check remaining for if only dark element is present
-    console.log("i===",i)
-    console.log("j===",j)
-    const element = document.querySelector(`#item${i}${j}`)
-    selectedChildren.push(element)
-    if(startColOldDIv<endColNewDiv){
+  if (startRowOldDiv > endRownNewDiv) {
+    console.log("inside if=====%%%%")
+    let i;
+    let j;
+    if (startColOldDIv < endColNewDiv) {
       //right movement
-      i--
-      j++
-    }else{
-      
+      i = startRowOldDiv - 1
+      j = startColOldDIv + 1
+    } else {
+
       //left movement
-      i--
-      j--
-      
+      i = startRowOldDiv - 1
+      j = startColOldDIv - 1
+
     }
-  }
-  return selectedChildren
+
+    //increase count
+    while (i != endRownNewDiv) {
+
+      //check remaining for if only dark element is present
+      console.log("i===", i)
+      console.log("j===", j)
+      const element = document.querySelector(`#item${i}${j}`)
+      selectedChildren.push(element)
+      if (startColOldDIv < endColNewDiv) {
+        //right movement
+        i--
+        j++
+      } else {
+
+        //left movement
+        i--
+        j--
+
+      }
+    }
+    return selectedChildren
 
 
-}else{
-  console.log("inside else=== of idffaf")
-  console.log("inside if=====%%%%")
-  let i;
-  let j;
-  if(startColOldDIv>endColNewDiv){
-    //left movement
-    i = startRowOldDiv  + 1
-    j = startColOldDIv - 1
-  }else{
-    
-    //right movement
-    i = startRowOldDiv  + 1
-    j = startColOldDIv + 1
-    
-  }
-  
-  //increase count
-  while(i != endRownNewDiv){
-
-    //check remaining for if only dark element is present
-    console.log("i===",i)
-    console.log("j===",j)
-    const element = document.querySelector(`#item${i}${j}`)
-    selectedChildren.push(element)
-    if(startColOldDIv>endColNewDiv){
+  } else {
+    console.log("inside else=== of idffaf")
+    console.log("inside if=====%%%%")
+    let i;
+    let j;
+    if (startColOldDIv > endColNewDiv) {
       //left movement
-      i++
-      j--
-    }else{
-      
+      i = startRowOldDiv + 1
+      j = startColOldDIv - 1
+    } else {
+
       //right movement
-      i++
-      j++
-      
+      i = startRowOldDiv + 1
+      j = startColOldDIv + 1
+
     }
+
+    //increase count
+    while (i != endRownNewDiv) {
+
+      //check remaining for if only dark element is present
+      console.log("i===", i)
+      console.log("j===", j)
+      const element = document.querySelector(`#item${i}${j}`)
+      selectedChildren.push(element)
+      if (startColOldDIv > endColNewDiv) {
+        //left movement
+        i++
+        j--
+      } else {
+
+        //right movement
+        i++
+        j++
+
+      }
+    }
+    return selectedChildren
   }
-  return selectedChildren
+
+
 }
 
-
-}
-
-function childrenInBetweenForKingMovement(){
+function childrenInBetweenForKingMovement() {
   //retrives children in between old selected div and new selected div so that we can remove children
 
 
@@ -325,7 +369,12 @@ function isValidIndexMoveForDark(oldSelectedDiv, newSelectedDiv) {
   console.log("nsd", parseInt(newSelectedDiv[4]));
   console.log("osd", parseInt(oldSelectedDiv[4]));
 
-  if(determinIfKing(oldSelectedDiv)){
+  const row1 = parseInt(newSelectedDiv[4])
+  const row2 = parseInt(oldSelectedDiv[4])
+  const difference = Math.abs(row1 - row2)
+
+
+  if (determinIfKing(oldSelectedDiv)) {
 
     /*
     
@@ -334,38 +383,48 @@ function isValidIndexMoveForDark(oldSelectedDiv, newSelectedDiv) {
       if all items are white remove items and perform movement
     */
 
+    if (difference == 1) {
+      console.log("difference=====", difference)
+      return true
+    } else if (difference == 2) {
+      let isValidMove = true
+      let darkItemPresent = false;
+      console.log("its king===true")
+      let returnedList = checkItemInBtwnDarkMovementForKing(oldSelectedDiv, newSelectedDiv)
+      console.log("items between kings movement=====", returnedList)
+
+      returnedList = returnedList.filter((item) => item.childElementCount > 0)
+
+      if (returnedList.length > 0) {
+        for (let i = 0; i < returnedList.length; i++) {
+          let color = determineDarkOrWhite(returnedList[i])
+          if (color == "dark") {
+            isValidMove = false
+
+          }
+        }
+      } else {
+        return false
+      }
+
+      if (isValidMove) {
+        for (let i = 0; i < returnedList.length; i++) {
+          console.log('=====returned list element=====', returnedList[i].id)
+          document.querySelector(`#${returnedList[i].id}`).innerHTML = ``
 
 
-    let isValidMove = true
-    let darkItemPresent = false;
-    console.log("its king===true")
-    let returnedList = checkItemInBtwnDarkMovementForKing(oldSelectedDiv,newSelectedDiv)
-    console.log("items between kings movement=====",returnedList)
 
-    returnedList = returnedList.filter((item)=> item.childElementCount > 0)
-
-    if(returnedList.length > 0){
-      for(let i=0;i<returnedList.length;i++){
-        let color = determineDarkOrWhite(returnedList[i])
-        if(color == "dark"){
-          isValidMove = false
-          
         }
       }
-    }
 
-    if(isValidMove){
-      for(let i=0;i<returnedList.length;i++){
-        console.log('=====returned list element=====',returnedList[i].id)
-        document.querySelector(`#${returnedList[i].id}`).innerHTML = ``
-        
-        
-        
-      }
+
+      return isValidMove
+
+    } else {
+      return false
     }
 
 
-    return isValidMove
   }
 
   if (parseInt(newSelectedDiv[4]) == parseInt(oldSelectedDiv[4]) + 1) {
@@ -410,7 +469,11 @@ function isValidIndexMoveForWhite(oldSelectedDiv, newSelectedDiv) {
   console.log("nsd", parseInt(newSelectedDiv[4]));
   console.log("osd", parseInt(oldSelectedDiv[4]));
 
-  if(determinIfKing(oldSelectedDiv)){
+  const row1 = parseInt(newSelectedDiv[4])
+  const row2 = parseInt(oldSelectedDiv[4])
+  const difference = Math.abs(row1 - row2)
+
+  if (determinIfKing(oldSelectedDiv)) {
 
     /*
     
@@ -419,38 +482,48 @@ function isValidIndexMoveForWhite(oldSelectedDiv, newSelectedDiv) {
       if all items are white remove items and perform movement
     */
 
+    if (difference == 1) {
+      return true
+    } else if (difference == 2) {
+      let isValidMove = true
+      let whiteItemPresent = false;
+
+      console.log("its king===true")
+      let returnedList = checkItemInBtwnDarkMovementForKing(oldSelectedDiv, newSelectedDiv)
+      console.log("items between kings movement=====", returnedList)
+      returnedList = returnedList.filter((item) => item.childElementCount > 0)
+
+      if (returnedList.length > 0) {
+        for (let i = 0; i < returnedList.length; i++) {
+          let color = determineDarkOrWhite(returnedList[i])
+          if (color == "white") {
+            isValidMove = false
+
+          }
+        }
+      } else {
+        return false
+      }
+
+      if (isValidMove) {
+        for (let i = 0; i < returnedList.length; i++) {
+          console.log('=====returned list element=====', returnedList[i].id)
+          document.querySelector(`#${returnedList[i].id}`).innerHTML = ``
 
 
-    let isValidMove = true
-    let whiteItemPresent = false;
-    
-    console.log("its king===true")
-    let returnedList = checkItemInBtwnDarkMovementForKing(oldSelectedDiv,newSelectedDiv)
-    console.log("items between kings movement=====",returnedList)
-    returnedList = returnedList.filter((item)=> item.childElementCount > 0)
 
-    if(returnedList.length > 0){
-      for(let i=0;i<returnedList.length;i++){
-        let color = determineDarkOrWhite(returnedList[i])
-        if(color == "white"){
-          isValidMove = false
-          
         }
       }
-    }
 
-    if(isValidMove){
-      for(let i=0;i<returnedList.length;i++){
-        console.log('=====returned list element=====',returnedList[i].id)
-        document.querySelector(`#${returnedList[i].id}`).innerHTML = ``
-        
-        
-        
-      }
+
+      return isValidMove
+    } else {
+      return false
     }
 
 
-    return isValidMove 
+
+
   }
 
   if (parseInt(newSelectedDiv[4]) + 1 == parseInt(oldSelectedDiv[4])) {
