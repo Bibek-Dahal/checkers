@@ -12,6 +12,50 @@ let oldSelectedDiv = null;
 addEventListener();
 addEventListenerToButton();
 
+
+export function wsMovement(id){
+  console.log("id==", id);
+  let newSelectedDiv = document.querySelector(`#item${id}`);
+  newSelectedDiv.style.border = "2px solid red";
+
+  if (oldSelectedDiv) {
+    console.log("oid==", oldSelectedDiv.id);
+  }
+
+  if (oldSelectedDiv != null) {
+    if (oldSelectedDiv.id == newSelectedDiv.id) {
+      //checks if user slect same newSelectedDiv
+      // it should be unselected so marked oldSelectedDiv as null
+      newSelectedDiv.style.border = null;
+      oldSelectedDiv = null;
+
+      return;
+    }
+
+    console.log("inside if");
+
+    let prev_div = document.querySelector(`#${oldSelectedDiv.id}`);
+    prev_div.style.border = null;
+    let oldSelectedDivArg = oldSelectedDiv;
+    oldSelectedDiv = newSelectedDiv;
+
+    let validMove = checkValidMove(oldSelectedDivArg, newSelectedDiv);
+    // prev_div.innerHTML = ''
+    console.log("valid move==", validMove);
+
+    if (validMove) {
+      performMovement(oldSelectedDivArg, newSelectedDiv);
+    }
+  } else {
+    console.log("inside else");
+
+    console.log(newSelectedDiv.style.class);
+
+    oldSelectedDiv = newSelectedDiv;
+  }
+
+}
+
 export function divClick(id) {
 
   socket.emit("divClicked", JSON.stringify({'divId':id}));
