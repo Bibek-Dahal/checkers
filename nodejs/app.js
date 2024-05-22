@@ -1,5 +1,6 @@
 import express from 'express'
 import {Server} from 'socket.io'
+import cors from 'cors'
 
 const io = new Server({
     cors: {
@@ -8,8 +9,15 @@ const io = new Server({
         // credentials: true
   }
 })
+const corsOptions = {
+    origin: '*',//(https://your-client-app.com)
+    optionsSuccessStatus: 200,
+  };
+ 
+  
 
 const app =  express()
+app.use(cors(corsOptions));
 const PORT = 8000
 app.get('/',(req,res)=>{
     res.send('hello world')
