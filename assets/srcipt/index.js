@@ -1,5 +1,6 @@
 "use strict";
 import { pushToStack, undo, redo } from "./stack.js";
+import playMoveSound from "./soundPlay.js";
 import {
   addEventListener,
   addEventListenerToButton,
@@ -16,7 +17,7 @@ export function createMvmt(id) {
 
   console.log("id==", id);
   let newSelectedDiv = document.querySelector(`#item${id}`);
-  newSelectedDiv.style.border = "2px solid red";
+  newSelectedDiv.style.border = "5px solid red";
 
   if (oldSelectedDiv) {
     console.log("oid==", oldSelectedDiv.id);
@@ -45,6 +46,8 @@ export function createMvmt(id) {
 
     if (validMove) {
       performMovement(oldSelectedDivArg, newSelectedDiv);
+      playMoveSound()
+
     }
   } else {
     console.log("inside else");
@@ -63,7 +66,7 @@ export function divClick(id) {
 
   console.log("id==", id);
   let newSelectedDiv = document.querySelector(`#item${id}`);
-  newSelectedDiv.style.border = "2px solid red";
+  newSelectedDiv.style.border = "5px solid red";
 
   if (oldSelectedDiv) {
     console.log("oid==", oldSelectedDiv.id);
@@ -92,6 +95,7 @@ export function divClick(id) {
 
     if (validMove) {
       performMovement(oldSelectedDivArg, newSelectedDiv);
+      playMoveSound()
     }
   } else {
     console.log("inside else");
