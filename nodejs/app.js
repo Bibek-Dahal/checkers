@@ -39,6 +39,22 @@ io.on('connection',(socket)=>{
 
         
     })
+
+    socket.on('onMessage',(data)=>{
+        console.log("Hello ,msg received===",data)
+        // io.emit('divClicked',data);
+        io.in("room1").emit('onMessage',data);
+
+        
+    })
+
+    socket.on('isTyping',(data)=>{
+        console.log("is typing event===",data)
+        // io.emit('divClicked',data);
+        socket.broadcast.emit('isTyping',{isTyping:data.isTyping});
+
+        
+    })
 })
 
 

@@ -13,19 +13,12 @@ let oldSelectedDiv = null;
 addEventListener();
 addEventListenerToButton();
 
-<<<<<<< HEAD
-
-export function wsMovement(id){
-  console.log("id==", id);
-  let newSelectedDiv = document.querySelector(`#item${id}`);
-  newSelectedDiv.style.border = "2px solid red";
-=======
 export function createMvmt(id) {
 
   console.log("id==", id);
   let newSelectedDiv = document.querySelector(`#item${id}`);
-  newSelectedDiv.style.border = "5px solid red";
->>>>>>> 1b4f78b88c679cb45c03c235735bcb97c57fa652
+  // newSelectedDiv.style.border = "5px solid red";
+  newSelectedDiv.style.backgroundColor = null;
 
   if (oldSelectedDiv) {
     console.log("oid==", oldSelectedDiv.id);
@@ -35,7 +28,7 @@ export function createMvmt(id) {
     if (oldSelectedDiv.id == newSelectedDiv.id) {
       //checks if user slect same newSelectedDiv
       // it should be unselected so marked oldSelectedDiv as null
-      newSelectedDiv.style.border = null;
+      newSelectedDiv.style.backgroundColor = null;
       oldSelectedDiv = null;
 
       return;
@@ -44,7 +37,7 @@ export function createMvmt(id) {
     console.log("inside if");
 
     let prev_div = document.querySelector(`#${oldSelectedDiv.id}`);
-    prev_div.style.border = null;
+    prev_div.style.backgroundColor = null;
     let oldSelectedDivArg = oldSelectedDiv;
     oldSelectedDiv = newSelectedDiv;
 
@@ -54,11 +47,8 @@ export function createMvmt(id) {
 
     if (validMove) {
       performMovement(oldSelectedDivArg, newSelectedDiv);
-<<<<<<< HEAD
-=======
       playMoveSound()
 
->>>>>>> 1b4f78b88c679cb45c03c235735bcb97c57fa652
     }
   } else {
     console.log("inside else");
@@ -67,21 +57,20 @@ export function createMvmt(id) {
 
     oldSelectedDiv = newSelectedDiv;
   }
-<<<<<<< HEAD
-
-=======
->>>>>>> 1b4f78b88c679cb45c03c235735bcb97c57fa652
 }
 
 export function divClick(id) {
 
 
-  socket.emit("divClicked", JSON.stringify({ 'divId': id }));
+  
+
+  socket.emit("divClicked", JSON.stringify({ 'divId': id,socketId:socket.id }));
 
 
   console.log("id==", id);
   let newSelectedDiv = document.querySelector(`#item${id}`);
-  newSelectedDiv.style.border = "5px solid red";
+  newSelectedDiv.style.backgroundColor = "orange";
+  
 
   if (oldSelectedDiv) {
     console.log("oid==", oldSelectedDiv.id);
@@ -91,7 +80,7 @@ export function divClick(id) {
     if (oldSelectedDiv.id == newSelectedDiv.id) {
       //checks if user slect same newSelectedDiv
       // it should be unselected so marked oldSelectedDiv as null
-      newSelectedDiv.style.border = null;
+      newSelectedDiv.style.backgroundColor = null;
       oldSelectedDiv = null;
 
       return;
@@ -100,7 +89,7 @@ export function divClick(id) {
     console.log("inside if");
 
     let prev_div = document.querySelector(`#${oldSelectedDiv.id}`);
-    prev_div.style.border = null;
+    prev_div.style.backgroundColor = null;
     let oldSelectedDivArg = oldSelectedDiv;
     oldSelectedDiv = newSelectedDiv;
 
@@ -122,7 +111,7 @@ export function divClick(id) {
 }
 
 function unselectDiv(selectedDiv) {
-  selectedDiv.style.border = null;
+  selectedDiv.style.backgroundColor = null;
   oldSelectedDiv = null;
 }
 
