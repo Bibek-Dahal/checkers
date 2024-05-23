@@ -18,7 +18,7 @@ export function createMvmt(id) {
   console.log("id==", id);
   let newSelectedDiv = document.querySelector(`#item${id}`);
   // newSelectedDiv.style.border = "5px solid red";
-  newSelectedDiv.style.backgroundColor = null;
+  newSelectedDiv.style.backgroundColor = "orange";
 
   if (oldSelectedDiv) {
     console.log("oid==", oldSelectedDiv.id);
